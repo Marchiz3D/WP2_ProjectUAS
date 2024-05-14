@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customers {
+  id            Int @id @default(autoincrement())
+  name          String @db.VarChar(100)
+  email         String @db.VarChar(100) @unique
+  password      String @db.VarChar(10)
+  phone_number  String @db.VarChar(20)
+  reservasi     Reservasi[]
+}
+
+model Kamar {
+  id            Int @id @default(autoincrement())
+  jumlah_kamar  Int
+  harga         Int
+  kamar         Reservasi[]
+}
+
+model Reservasi {
+  id                Int @id @default(autoincrement())
+  id_customers      Int
+  id_kamar          Int
+  tanggal_checkin   DateTime
+  tanggal_checkout  DateTime
+  customers         Customers @relation(fields: [id_customers], references: [id])
+  kamar             Kamar @relation(fields: [id_kamar], references: [id])
+
+  @@index([id_customers, id_kamar], map: "Reservasi_customersId_kamarId_fkey")
+}
