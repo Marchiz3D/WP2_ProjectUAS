@@ -17,7 +17,7 @@ model Customers {
   id            Int @id @default(autoincrement())
   name          String @db.VarChar(100)
   email         String @db.VarChar(100) @unique
-  password      String @db.VarChar(10)
+  password      String @db.VarChar(255)
   phone_number  String @db.VarChar(20)
   reservasi     Reservasi[]
 }
