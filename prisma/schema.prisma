@@ -24,7 +24,9 @@ model Customers {
 
 model Kamar {
   id            Int @id @default(autoincrement())
-  jumlah_kamar  Int
+  no_kamar      String
+  description   String @db.LongText
+  jumlah_kasur  Int
   harga         Int
   kamar         Reservasi[]
 }
