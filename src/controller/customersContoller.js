@@ -78,16 +78,15 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
+    if (!req.session.customersId) {
+      return res.status(403).json({ message: 'Anda belum login' });
+    }
     req.session.destroy((err) => {
       if (err) {
         console.log(err);
         return res.status(403).json({ message: 'Terjadi kesalahan saat logout' });
       }
-
-      if (!req.session.cookie) {
-        return res.status(401).json({ message: 'Anda belum login' });
-      }
-
+      res.clearCookie('connect.sid');
       res.status(200).json({ message: 'Berhasil Logout' });
     });
   } catch (error) {
