@@ -28,13 +28,13 @@ model Kamar {
   description   String @db.LongText
   jumlah_kasur  Int
   harga         Int
-  kamar         Reservasi[]
+  reservasi     Reservasi[]
 }
 
 model Reservasi {
   id                Int @id @default(autoincrement())
-  id_customers      Int
-  id_kamar          Int
+  id_customers      Int @unique
+  id_kamar          Int @unique
   tanggal_checkin   DateTime
   tanggal_checkout  DateTime
   customers         Customers @relation(fields: [id_customers], references: [id])

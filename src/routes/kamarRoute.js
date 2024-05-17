@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyAuth } from "../../middleware/verifyAuth.js";
+import { verifyAuth } from "../middleware/verifyAuth.js";
 import { addKamar, deleteKamar, getAllKamar, updateKamar } from "../controller/kamarController.js";
 
 const kamarRouter = express.Router();
