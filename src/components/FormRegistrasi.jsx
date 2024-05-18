@@ -1,77 +1,130 @@
+import axios from "axios"
 import React, { useState } from "react"
-import { Container, Form, Button } from "react-bootstrap" // Import Bootstrap components
 
 function FormRegistrasi() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phoneNumber: "",
-  })
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPasswrod] = useState("")
+  const [phone_number, setPhone_number] = useState("")
+  const [isRegistered, setIsRegistered] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }))
-  }
+  const handleName = (e) => setName(e.target.value)
+  const handleEmail = (e) => setEmail(e.target.value)
+  const handlePassword = (e) => setPasswrod(e.target.value)
+  const handlePhone_number = (e) => setPhone_number(e.target.value)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Lakukan sesuatu dengan data formulir, seperti mengirimkannya ke backend atau melakukan validasi
-    console.log(formData)
+    // Mengirimkan data ke backend
+    const data = {
+      name,
+      email,
+      password,
+      phone_number,
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/customers/signup",
+        data
+      )
+      if (response) {
+        setIsRegistered(true)
+      } else {
+        setIsRegistered(false)
+        setErrorMessage(response.data.message)
+      }
+    } catch (error) {
+      setIsRegistered(false)
+      setErrorMessage(error.message)
+    }
   }
 
   return (
-    <Container>
-      <h1>Form with Bootstrap 5 in React</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
+    <div className="flex justify-center items-center flex-col min-vh-100">
+      <form
+        method="post"
+        onSubmit={handleSubmit}
+        className="border-2 border-black rounded-md shadow-2xl bg-gray-300"
+      >
+        <div className="p-4">
+          <h3>Registrasi Customers</h3>
+        </div>
+        {isRegistered && (
+          <div
+            className="bg-green-200 text-center mx-2 rounded-md border-2 border-green-400 p-1"
+            role="alert"
+          >
+            Register Berhasil
+          </div>
+        )}
+        {!isRegistered && errorMessage && (
+          <div
+            className="bg-red-200 text-center mx-2 rounded-md border-2 border-red-400 p-1"
+            role="alert"
+          >
+            {errorMessage}
+          </div>
+        )}
+        <div className="form-label px-2 flex flex-col">
+          <label htmlFor="name">Name :</label>
+          <input
             type="text"
-            placeholder="Enter your name"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+            id="name"
+            value={name}
+            onChange={handleName}
+            className="rounded-md p-1 bg-gray-100 border-2 border-black"
+            required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="email">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
+        </div>
+        <div className="form-label px-2 flex flex-col">
+          <label htmlFor="email">Email :</label>
+          <input
+            type="text"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            id="email"
+            value={email}
+            onChange={handleEmail}
+            className="rounded-md p-1 bg-gray-100 border-2 border-black"
+            required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+        </div>
+        <div className="form-label px-2 flex flex-col">
+          <label htmlFor="password">Password :</label>
+          <input
             type="password"
-            placeholder="Password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            id="password"
+            value={password}
+            onChange={handlePassword}
+            className="rounded-md p-1 bg-gray-100 border-2 border-black"
+            required
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="phoneNumber">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control
-            type="tel"
-            placeholder="Enter phone number"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
+        </div>
+        <div className="form-label px-2 flex flex-col">
+          <label htmlFor="phone">Phone Number :</label>
+          <input
+            type="text"
+            name="phone"
+            id="phone"
+            value={phone_number}
+            onChange={handlePhone_number}
+            className="rounded-md p-1 bg-gray-100 border-2 border-black"
+            required
           />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </Container>
+        </div>
+        <div className="py-4 text-center">
+          <button
+            type="submit"
+            className="p-1 rounded-md border-2 border-black bg-gray-100"
+          >
+            Sign Up
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 

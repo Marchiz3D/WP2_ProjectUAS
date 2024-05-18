@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { Container, Form, Button } from "react-bootstrap" // Import Bootstrap components
 
 function FormLogin() {
   const [formData, setFormData] = useState({
@@ -24,34 +23,9 @@ function FormLogin() {
   }
 
   return (
-    <Container>
-      <h1>Form with Bootstrap 5 in React</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="email">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </Container>
+    <div>
+      <h1>Hello World</h1>
+    </div>
   )
 }
 

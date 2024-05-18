@@ -1,0 +1,61 @@
+<h1>REGISTRASI CUSTOMERS HOTEL ASHIAP</h1>
+      {/*Jika user berhasil terdaftar*/}
+      {isRegistered && (
+        <div className="alert alert-success" role="alert">
+          Register Berhasil
+        </div>
+      )}
+      {errorMessage && (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+      )}
+      <Form onSubmit={handleSubmit} method="post">
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter your name"
+            name="name"
+            value={name}
+            onChange={handleName}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="email">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            name="email"
+            value={email}
+            onChange={handleEmail}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={password}
+            onChange={handlePassword}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="phoneNumber">
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control
+            type="tel"
+            placeholder="Enter phone number"
+            name="phoneNumber"
+            value={phone_number}
+            onChange={handlePhone_number}
+            required
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>

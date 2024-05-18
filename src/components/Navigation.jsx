@@ -4,8 +4,8 @@ import { Navbar, Nav } from "react-bootstrap"
 
 const Navigation = () => {
   return (
-    <Navbar bg="light" expand="lg" className="p-3">
-      <Navbar.Brand href="#home">Hotel Ashiap</Navbar.Brand>
+    <Navbar expand="lg" className="p-3 bg-gray-300 fixed-top">
+      <Navbar.Brand href="/">Hotel Ashiap</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" /> {/* Burger Icon */}
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav>
