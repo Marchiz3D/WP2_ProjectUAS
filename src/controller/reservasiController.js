@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 export const addReservasi = async (req, res) => {
   try {
     // mengambil data customers untuk diambil idnya
-    const customers = await prisma.customers.findUnique({
+    const customers = await prisma.customers.findFirst({
       where: {
-        id: req.session.customersId
+        refresh_token: req.cookies.refreshToken
       }
     })
 
@@ -34,9 +34,9 @@ export const addReservasi = async (req, res) => {
 export const getReservasi = async (req, res) => {
   try {
     // Mengambil data customers
-    const customers = await prisma.customers.findUnique({
+    const customers = await prisma.customers.findFirst({
       where: {
-        id: req.session.customersId
+        refresh_token: req.cookies.refreshToken
       }
     })
     // Mengambil data reservasi
@@ -59,9 +59,9 @@ export const getReservasi = async (req, res) => {
 export const deleteReservasi = async (req, res) => {
   try {
     // Mengambil data customers
-    const customers = await prisma.customers.findUnique({
+    const customers = await prisma.customers.findFirst({
       where: {
-        id: req.session.customersId
+        refresh_token: req.cookies.refreshToken
       }
     })
 

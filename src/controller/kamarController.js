@@ -15,18 +15,22 @@ export const getAllKamar = async (req, res) => {
 }
 
 export const addKamar = async (req, res) => {
+  console.log(req.file);
   try {
     const { no_kamar, description, jumlah_kasur, harga } = req.body;
+
     const tambahKamar = await prisma.kamar.create({
       data: {
         no_kamar,
         description,
-        jumlah_kasur,
-        harga
+        jumlah_kasur: parseInt(jumlah_kasur),
+        harga: parseInt(harga),
+        gambar_kamar: req.file?.filename
       }
     })
     res.status(201).json({ message: tambahKamar });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 }
@@ -83,6 +87,7 @@ export const deleteKamar = async (req, res) => {
 
     res.status(200).json({ deleted: deletedKamar });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 }

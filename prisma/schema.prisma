@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,32 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customers {
-  id            Int @id @default(autoincrement())
-  name          String @db.VarChar(100)
-  email         String @db.VarChar(100) @unique
-  password      String @db.VarChar(255)
-  phone_number  String @db.VarChar(20)
-  reservasi     Reservasi[]
+model customers {
+  id            Int        @id @default(autoincrement())
+  name          String     @db.VarChar(100)
+  email         String     @unique(map: "Customers_email_key") @db.VarChar(100)
+  password      String     @db.VarChar(255)
+  phone_number  String     @db.VarChar(20)
+  refresh_token String?    @db.Text
+  reservasi     reservasi?
 }
 
-model Kamar {
-  id            Int @id @default(autoincrement())
-  no_kamar      String
-  description   String @db.LongText
-  jumlah_kasur  Int
-  harga         Int
-  reservasi     Reservasi[]
+model kamar {
+  id           Int        @id @default(autoincrement())
+  harga        Int
+  description  String     @db.LongText
+  jumlah_kasur Int
+  no_kamar     String
+  gambar_kamar     String?   @db.Text
+  reservasi    reservasi?
 }
 
-model Reservasi {
-  id                Int @id @default(autoincrement())
-  id_customers      Int @unique
-  id_kamar          Int @unique
-  tanggal_checkin   DateTime
-  tanggal_checkout  DateTime
-  customers         Customers @relation(fields: [id_customers], references: [id])
-  kamar             Kamar @relation(fields: [id_kamar], references: [id])
+model reservasi {
+  id               Int       @id @default(autoincrement())
+  id_customers     Int       @unique(map: "Reservasi_id_customers_key")
+  id_kamar         Int       @unique(map: "Reservasi_id_kamar_key")
+  tanggal_checkin  DateTime
+  tanggal_checkout DateTime
+  customers        customers @relation(fields: [id_customers], references: [id], map: "Reservasi_id_customers_fkey")
+  kamar            kamar     @relation(fields: [id_kamar], references: [id], map: "Reservasi_id_kamar_fkey")
 
   @@index([id_customers, id_kamar], map: "Reservasi_customersId_kamarId_fkey")
 }

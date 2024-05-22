@@ -1,5 +1,7 @@
 import express from 'express';
-import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import customersRouter from './src/routes/customersRoute.js';
 import kamarRouter from './src/routes/kamarRoute.js';
 import reservasiRouter from './src/routes/reservasiRoute.js';
@@ -7,12 +9,11 @@ import reservasiRouter from './src/routes/reservasiRoute.js';
 const app = express();
 const port = 5000;
 
-app.use(express.json());
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-}))
+// app.use('/api/kamar/view', express.static('public/images'));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true, allowedHeaders: true }));
 
 // route untuk mengambil data customers
 app.use('/api/customers', customersRouter);
