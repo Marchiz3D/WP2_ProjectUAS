@@ -1,14 +1,14 @@
 import React from "react"
+import FormReservasi from "../components/FormReservasi"
 import Navigation from "../components/Navigation"
-import Homepage from "../components/Homepage"
 
-const Home = () => {
+const Reservasi = () => {
   return (
     <>
       <Navigation />
-      <Homepage />
+      <FormReservasi />
     </>
   )
 }
 
-export default Home
+export default Reservasi

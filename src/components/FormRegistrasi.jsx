@@ -1,5 +1,6 @@
 import axios from "axios"
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 function FormRegistrasi() {
   const [name, setName] = useState("")
@@ -8,6 +9,7 @@ function FormRegistrasi() {
   const [phone_number, setPhone_number] = useState("")
   const [isRegistered, setIsRegistered] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const navigate = useNavigate()
 
   const handleName = (e) => setName(e.target.value)
   const handleEmail = (e) => setEmail(e.target.value)
@@ -31,6 +33,9 @@ function FormRegistrasi() {
       )
       if (response) {
         setIsRegistered(true)
+        setTimeout(() => {
+          navigate("/login")
+        }, 1000)
       } else {
         setIsRegistered(false)
         setErrorMessage(response.data.message)
@@ -46,7 +51,7 @@ function FormRegistrasi() {
       <form
         method="post"
         onSubmit={handleSubmit}
-        className="border-2 border-black rounded-md shadow-2xl bg-gray-300"
+        className="border-2 border-black rounded-md shadow-2xl shadow-zinc-500 bg-zinc-50 text-black"
       >
         <div className="p-4">
           <h3>Registrasi Customers</h3>
@@ -115,10 +120,16 @@ function FormRegistrasi() {
             required
           />
         </div>
-        <div className="py-4 text-center">
+        <div className="py-4 flex justify-center items-center gap-3">
+          <a
+            href="/"
+            className="p-1 rounded-md border-2 border-black bg-gray-100 no-underline text-black hover:transition-all hover:bg-gray-400"
+          >
+            Back to Home
+          </a>
           <button
             type="submit"
-            className="p-1 rounded-md border-2 border-black bg-gray-100"
+            className="py-1 px-4 rounded-md border-2 border-black bg-gray-100 hover:transition-all hover:bg-gray-400"
           >
             Sign Up
           </button>
