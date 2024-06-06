@@ -11,23 +11,37 @@ export const addReservasi = async (req, res) => {
       }
     })
 
+
     // Menambahkan data reservasi
     const { lama_hari, id_kamar } = req.body;
     const tanggalSekarang = new Date(Date.now());
     const tanggalCheckout = new Date(tanggalSekarang);
     tanggalCheckout.setDate(tanggalSekarang.getDate() + lama_hari);
+
+    // Membuat format tanggal dan waktu
+    const formatDate = (date) => {
+      const day = date.getDate().toString().padStart(2, '0'); // Tambah karakter '0' di depan jika dibawah 10/hanya ada 1 digit
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
+    }
+
+    const formatDateCheckin = formatDate(tanggalSekarang);
+    const formatDateCheckout = formatDate(tanggalCheckout);
+
     const reservasi = await prisma.reservasi.create({
       data: {
         id_customers: customers.id,
         id_kamar,
-        tanggal_checkin: tanggalSekarang,
-        tanggal_checkout: tanggalCheckout
+        tanggal_checkin: formatDateCheckin.toString(),
+        tanggal_checkout: formatDateCheckout.toString()
       }
     })
-
     res.status(201).json({ reserved: reservasi })
   } catch (error) {
-    res.status(500).json({ messsage: 'Kamar telah dipesan' });
+    res.status(500).json({ message: 'Gagal menambahkan data reservasi', error: error.message });
   }
 }
 
@@ -48,7 +62,7 @@ export const getReservasi = async (req, res) => {
     })
 
     // Validasi apakah ada data resevasi atau tidak
-    if (!reservasi) return res.status(404).json({ messsage: 'Data reservasi tidak ditemukan' });
+    if (!reservasi) return res.status(404).json({ messsage: 'Belum ada data reservasi' });
 
     res.status(200).json(reservasi);
   } catch (error) {

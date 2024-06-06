@@ -9,11 +9,11 @@ import reservasiRouter from './src/routes/reservasiRoute.js';
 const app = express();
 const port = 5000;
 
-// app.use('/api/kamar/view', express.static('public/images'));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: 'http://localhost:3000', credentials: true, allowedHeaders: true }));
+app.use('/api/kamar/view', express.static('public/images'));
 
 // route untuk mengambil data customers
 app.use('/api/customers', customersRouter);

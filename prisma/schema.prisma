@@ -8,33 +8,34 @@ datasource db {
 }
 
 model customers {
-  id            Int        @id @default(autoincrement())
-  name          String     @db.VarChar(100)
-  email         String     @unique(map: "Customers_email_key") @db.VarChar(100)
-  password      String     @db.VarChar(255)
-  phone_number  String     @db.VarChar(20)
-  refresh_token String?    @db.Text
-  reservasi     reservasi?
+  id            Int         @id @default(autoincrement())
+  name          String      @db.VarChar(100)
+  email         String      @unique(map: "Customers_email_key") @db.VarChar(100)
+  password      String      @db.VarChar(255)
+  phone_number  String      @db.VarChar(20)
+  refresh_token String?     @db.Text
+  reservasi     reservasi[]
 }
 
 model kamar {
-  id           Int        @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   harga        Int
-  description  String     @db.LongText
+  description  String      @db.LongText
   jumlah_kasur Int
   no_kamar     String
-  gambar_kamar     String?   @db.Text
-  reservasi    reservasi?
+  gambar_kamar String?     @db.Text
+  reservasi    reservasi[]
 }
 
 model reservasi {
   id               Int       @id @default(autoincrement())
-  id_customers     Int       @unique(map: "Reservasi_id_customers_key")
-  id_kamar         Int       @unique(map: "Reservasi_id_kamar_key")
-  tanggal_checkin  DateTime
-  tanggal_checkout DateTime
-  customers        customers @relation(fields: [id_customers], references: [id], map: "Reservasi_id_customers_fkey")
-  kamar            kamar     @relation(fields: [id_kamar], references: [id], map: "Reservasi_id_kamar_fkey")
+  id_customers     Int       
+  id_kamar         Int
+  tanggal_checkin  String
+  tanggal_checkout String
+  customers        customers @relation(fields: [id_customers], references: [id], map: "Reservasi_Customers_fkey")
+  kamar            kamar     @relation(fields: [id_kamar], references: [id], map: "Reservasi_Kamar_fkey")
 
-  @@index([id_customers, id_kamar], map: "Reservasi_customersId_kamarId_fkey")
+  @@index([id_customers, id_kamar])
 }
+

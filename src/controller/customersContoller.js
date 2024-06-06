@@ -17,6 +17,26 @@ export const getAllCustomers = async (req, res) => {
   }
 }
 
+export const getCustomer = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) return res.status(401).json({ message: "Unauthorized" });
+
+    const customer = await prisma.customers.findFirst({
+      where: {
+        refresh_token: refreshToken
+      }
+    })
+
+    if (!customer) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(customer)
+  } catch (error) {
+    res.status(505).json({ message: error });
+  }
+}
 export const addCustomers = async (req, res) => {
   try {
     const { name, email, password, phone_number } = req.body;

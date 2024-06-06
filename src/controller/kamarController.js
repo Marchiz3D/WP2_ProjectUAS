@@ -55,8 +55,9 @@ export const updateKamar = async (req, res) => {
       data: {
         no_kamar,
         description,
-        jumlah_kasur,
-        harga
+        jumlah_kasur: parseInt(jumlah_kasur),
+        harga: parseInt(harga),
+        gambar_kamar: req.file?.filename
       }
     })
 
