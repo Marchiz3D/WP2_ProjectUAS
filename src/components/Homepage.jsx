@@ -8,30 +8,33 @@ const Homepage = () => {
         <Carousel className="lg:w-3/4 shadow-xl shadow-zinc-100">
           <Carousel.Item>
             <Image
-              src="https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2020/11/10-Hotel-Terbaik-di-Bandung-dari-Segi-Fasilitas-Akses-dan-Pemandangan.jpg"
+              src="/assets/kolamrenang.jpg"
               className="w-100"
+              style={{ height: "500px" }}
             />
-            <Carousel.Caption>
+            <Carousel.Caption className="bg-slate-800 rounded-md opacity-90">
               <h3>First slide label</h3>
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
             <Image
-              src="https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2020/11/10-Hotel-Terbaik-di-Bandung-dari-Segi-Fasilitas-Akses-dan-Pemandangan.jpg"
+              src="/assets/hotel.webp"
               className="w-100"
+              style={{ height: "500px" }}
             />
-            <Carousel.Caption>
+            <Carousel.Caption className="bg-slate-800 rounded-md opacity-90">
               <h3>Second slide label</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
             <Image
-              src="https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2020/11/10-Hotel-Terbaik-di-Bandung-dari-Segi-Fasilitas-Akses-dan-Pemandangan.jpg"
+              src="/assets/HotelHero.jpg"
               className="w-100"
+              style={{ height: "500px" }}
             />
-            <Carousel.Caption>
+            <Carousel.Caption className="bg-slate-800 rounded-md opacity-90">
               <h3>Third slide label</h3>
               <p>
                 Praesent commodo cursus magna, vel scelerisque nisl consectetur.
@@ -41,21 +44,23 @@ const Homepage = () => {
         </Carousel>
       </section>
       <section className="mt-5" id="about">
-        <h1 className="text-center">About Us</h1>
+        <h1 className="text-center">Hotel Pallete</h1>
+        <h4 className="italic text-center">"Book Your Dream Stay with Us"</h4>
         <div>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illum, ut
-            veniam optio non laudantium eos omnis! Quibusdam, ducimus ea
-            laboriosam aut adipisci dolore porro incidunt dolor animi omnis
-            necessitatibus ipsa ratione molestias eaque tempora dolorum ipsum
-            non? Deleniti, cum et expedita magni, neque omnis necessitatibus
-            labore dolor ex illum provident alias! Consequatur expedita culpa,
-            beatae facilis, ipsam temporibus cupiditate quidem autem, qui
-            veritatis architecto veniam? Asperiores nemo vitae rem nostrum
-            pariatur quasi labore repudiandae corrupti perferendis, consequatur
-            in molestias atque libero repellendus nesciunt aperiam, qui ipsum
-            rerum voluptatibus veniam eos reiciendis assumenda? Tempore fuga
-            odio, vitae dolor perspiciatis dolorum doloremque?
+            "Hotel Pallete adalah platform reservasi online yang memudahkan
+            pengguna untuk memesan kamar di hotel, resort, atau lodge
+            favoritnya. Dengan antarmuka yang intuitif dan cepat, pengguna dapat
+            dengan mudah mencari, membandingkan, dan memesan kamar yang sesuai
+            dengan kebutuhan mereka. Hotel Pallete menawarkan fitur-fitur
+            inovatif seperti real-time availability, deskripsi kamar yang
+            detail, serta sistem pembayaran yang aman. Dengan menggunakan Hotel
+            Pallete, pengguna dapat memesan kamar dengan harga terbaik,
+            mendapatkan informasi yang akurat tentang fasilitas dan hiburan di
+            hotel, serta mengelola reservasi mereka secara online. "Book Your
+            Dream Stay with Us" - demikian tagline Hotel Pallete yang
+            menunjukkan bahwa aplikasi ini hadir untuk membantu Anda mendapatkan
+            pengalaman menginap yang sempurna."
           </p>
         </div>
       </section>

@@ -6,7 +6,7 @@ let expire = 0;
 
 const refreshToken = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/customers/token', { withCredentials: true });
+    const response = await axios.get('http://localhost:5000/api/customers/token', { withCredentials: true, baseURL: "http://localhost:5000", headers: { "Content-Type": "application/json" } });
     token = response.data.token;
     const decoded = jwtDecode(token);
     expire = decoded.exp;
