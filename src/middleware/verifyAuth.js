@@ -4,7 +4,7 @@ export const verifyAuth = (req, res, next) => {
   try {
     const headers = req.headers['authorization'];
     const token = headers && headers.split(' ')[1];
-    if (token == null) return res.sendStatus(401).json({ message: "Invalid token" });
+    if (token == null) return res.status(401).json({ message: "Invalid token" });
 
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {

@@ -24,6 +24,7 @@ model kamar {
   jumlah_kasur Int
   no_kamar     String
   gambar_kamar String?     @db.Text
+  status_kamar Boolean     @default(false)
   reservasi    reservasi[]
 }
 
@@ -33,9 +34,10 @@ model reservasi {
   id_kamar         Int
   tanggal_checkin  String
   tanggal_checkout String
-  customers        customers @relation(fields: [id_customers], references: [id], map: "Reservasi_Customers_fkey")
-  kamar            kamar     @relation(fields: [id_kamar], references: [id], map: "Reservasi_Kamar_fkey")
+  status_reservasi String
+  customers        customers @relation(fields: [id_customers], references: [id])
+  kamar            kamar     @relation(fields: [id_kamar], references: [id])
 
-  @@index([id_customers, id_kamar])
+  @@index([id_customers, id_kamar, tanggal_checkin])
 }
 

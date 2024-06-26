@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { validationResult } from "express-validator";
 
 const prisma = new PrismaClient();
 
@@ -32,13 +33,25 @@ export const getCustomer = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(customer)
+    res.status(200).json({
+      customer: {
+        id: customer.id,
+        name: customer.name,
+        email: customer.email,
+        nomor_telepon: customer.phone_number
+      }
+    })
   } catch (error) {
     res.status(505).json({ message: error });
   }
 }
 export const addCustomers = async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { name, email, password, phone_number } = req.body;
     console.log(name, email, password, phone_number);
     // Mengambil data customers berdasarkan email
@@ -49,7 +62,7 @@ export const addCustomers = async (req, res) => {
     });
 
     // Validasi apakah customers sudah terdaftar
-    if (customers) return res.status(403).json({ message: 'User telah terdaftar' });
+    if (customers) return res.status(403).json({ message: `Email sudah digunakan.` });
 
     // Enkripsi password
     const salt = await bcrypt.genSalt(10);
@@ -68,7 +81,7 @@ export const addCustomers = async (req, res) => {
 
     res.status(201).json({ customers: newCustomers });
   } catch (error) {
-    res.status(505).json({ message: error })
+    res.status(500).json({ message: error })
     console.log(error);
   }
 }
@@ -114,7 +127,7 @@ export const login = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000
     })
 
-    res.status(200).json({ message: 'Berhasil Login', token: token });
+    res.status(200).json({ message: 'Berhasil Login', customers: { name: customers.name, email: customers.email }, token: token });
   } catch (error) {
     res.status(505).json({ message: error });
     console.log(error);

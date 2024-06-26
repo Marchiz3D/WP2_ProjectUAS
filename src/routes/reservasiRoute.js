@@ -8,6 +8,6 @@ reservasiRouter.post('/addreservasi', verifyAuth, addReservasi);
 
 reservasiRouter.get('/view', verifyAuth, getReservasi);
 
-reservasiRouter.delete('/deletereservasi', verifyAuth, deleteReservasi);
+reservasiRouter.delete('/deletereservasi/:kamarId', verifyAuth, deleteReservasi);
 
 export default reservasiRouter;

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { createTransaction } from "../utils/transaction.js";
 
 const prisma = new PrismaClient();
 
@@ -11,12 +12,13 @@ export const addReservasi = async (req, res) => {
       }
     })
 
+    if (!customers) return res.status(404).json({ message: 'Customers tidak ditemukan' });
 
-    // Menambahkan data reservasi
     const { lama_hari, id_kamar } = req.body;
     const tanggalSekarang = new Date(Date.now());
     const tanggalCheckout = new Date(tanggalSekarang);
     tanggalCheckout.setDate(tanggalSekarang.getDate() + lama_hari);
+
 
     // Membuat format tanggal dan waktu
     const formatDate = (date) => {
@@ -31,17 +33,65 @@ export const addReservasi = async (req, res) => {
     const formatDateCheckin = formatDate(tanggalSekarang);
     const formatDateCheckout = formatDate(tanggalCheckout);
 
+    // Mengambil data kamar apakah ada atau tidak
+    const kamar = await prisma.kamar.findUnique({
+      where: {
+        id: id_kamar
+      }
+    })
+
+    // Membuat transaksi
+    if (!kamar) return res.status(404).json({ message: 'Kamar tidak ditemukan' });
+
+    const { order_id, transaction } = await createTransaction({
+      formatDateCheckin: tanggalSekarang,
+      formatDateCheckout: tanggalCheckout,
+      kamarId: id_kamar
+    }, res)
+
+    console.log(transaction)
+
+    if (!transaction) {
+      return res.status(500).json({ message: 'Gagal membuat transaksi' });
+    }
+
+    // Menambahkan data reservasi
     const reservasi = await prisma.reservasi.create({
       data: {
         id_customers: customers.id,
         id_kamar,
         tanggal_checkin: formatDateCheckin.toString(),
-        tanggal_checkout: formatDateCheckout.toString()
+        tanggal_checkout: formatDateCheckout.toString(),
+        status_reservasi: 'paid'
       }
     })
-    res.status(201).json({ reserved: reservasi })
+
+    // update status kamar
+    await prisma.kamar.update({
+      where: {
+        id: id_kamar
+      },
+      data: {
+        status_kamar: true
+      }
+    })
+
+    if (!reservasi) {
+      return await prisma.kamar.update({
+        where: {
+          id: id_kamar
+        },
+        data: {
+          status_kamar: false
+        }
+      })
+    }
+
+    res.status(201).json({ reserved: reservasi, transaction, order_id });
+
   } catch (error) {
     res.status(500).json({ message: 'Gagal menambahkan data reservasi', error: error.message });
+    console.log(error)
   }
 }
 
@@ -53,6 +103,7 @@ export const getReservasi = async (req, res) => {
         refresh_token: req.cookies.refreshToken
       }
     })
+
     // Mengambil data reservasi
     const id_customers = customers.id
     const reservasi = await prisma.reservasi.findFirst({
@@ -61,10 +112,17 @@ export const getReservasi = async (req, res) => {
       }
     })
 
+    // Mengambil data kamar
+    const kamar = await prisma.kamar.findFirst({
+      where: {
+        id: reservasi.id_kamar
+      }
+    })
+
     // Validasi apakah ada data resevasi atau tidak
     if (!reservasi) return res.status(404).json({ messsage: 'Belum ada data reservasi' });
 
-    res.status(200).json(reservasi);
+    res.status(200).json({ reservasi, no_kamar: kamar.no_kamar, customer: { name: customers.name, email: customers.email } });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -72,26 +130,28 @@ export const getReservasi = async (req, res) => {
 
 export const deleteReservasi = async (req, res) => {
   try {
-    // Mengambil data customers
-    const customers = await prisma.customers.findFirst({
+    let { kamarId } = req.params;
+    kamarId = parseInt(kamarId);
+
+    const response = await prisma.reservasi.deleteMany({
       where: {
-        refresh_token: req.cookies.refreshToken
+        id_kamar: kamarId
       }
     })
 
-    // Mencari data reservasi
-    const reservasi = await prisma.reservasi.findMany();
+    if (!response) return res.status(404).json({ message: 'Reservasi tidak ditemukan' });
 
-    // validasi jika reservasi tidak ada
-    if (!reservasi) return res.status(404).json({ message: 'Data reservasi tidak ditemukan' });
-
-    const deletedReservasi = await prisma.reservasi.delete({
+    // update status kamar
+    await prisma.kamar.update({
       where: {
-        id_customers: customers.id
+        id: kamarId
+      },
+      data: {
+        status_kamar: false
       }
     })
 
-    res.status(200).json({ deleted: deletedReservasi });
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);
     console.log(error);
